@@ -1,0 +1,14 @@
+﻿@page "/businesspartner/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+<h3>Nový obchodní partner</h3>
+<Form ButtonText="Vytvořit partnera" bp="@bp"
+      OnValidSubmit="@CreateBusinessPartner" />
+@code {
+    BusinessPartner bp = new BusinessPartner();
+    async Task CreateBusinessPartner()
+    {
+        await http.PostAsJsonAsync("api/businesspartner", bp);
+        uriHelper.NavigateTo("businesspartner");
+    }
+}

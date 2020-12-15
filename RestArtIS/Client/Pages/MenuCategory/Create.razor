@@ -1,0 +1,21 @@
+﻿@page "/menucategory/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+<h3>Nová kategorie menu</h3>
+<Form ButtonText="Vytvořit kategorii menu" mc="@mc"
+      OnValidSubmit="@CreateMenuCategory"
+      OnValidCancel="@Cancel"
+      />
+@code {
+    MenuCategory mc = new MenuCategory();
+    async Task CreateMenuCategory()
+    {
+        await http.PostAsJsonAsync("api/menucategory", mc);
+        uriHelper.NavigateTo("menucategory");
+    }
+
+    void Cancel()
+    {
+        uriHelper.NavigateTo("menucategory");
+    }
+}

@@ -1,0 +1,81 @@
+<EditForm Model="@vat" OnValidSubmit="@OnValidSubmit">
+    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+        <p>
+            <MatTextField Label="Název" FullWidth="true" @bind-Value="@vat.Name"></MatTextField>
+        </p>
+        <p>
+            <MatTextField Label="Aktuální sazba" ReadOnly="true" FullWidth="true" @bind-Value="@rate"></MatTextField>
+        </p>
+        <p>
+            <MatButton type="button" Label="Nová sazba" OnClick="@CreateNewRate" />
+        </p>
+        <p>
+            <MatTable Items="@vat.VatHistories" ShowPaging="false">
+                <MatTableHeader>
+                    <th>Datum od 12</th>
+                    <th>Datum do</th>
+                    <th>Sazba</th>
+                </MatTableHeader>
+                <MatTableRow Context="rowContext">
+                    <tr>@rowContext.ValidFrom</tr>
+                    <tr>@rowContext.ValidTo</tr>
+                    <tr>@rowContext.Rate</tr>
+                </MatTableRow>
+            </MatTable>
+        </p>
+    </div>
+
+    <MatButton type="submit" class="btn btn-primary">@ButtonText</MatButton>
+    <MatButton type="button" OnClick="@Cancel">Storno</MatButton>
+
+    <MatDialog @bind-IsOpen="@IsNewRateDialog">
+        <MatDialogTitle>@($"Nová hodota sazby DPH {vat.Name}")</MatDialogTitle>
+        <MatDialogContent>
+            <div>
+                <MatTextField Label="Sazba" @bind-Value="@NewRate" /> %
+                <MatDatePicker Label="Platná od"@bind-Value="@NewDateFrom" AllowInput="false" Minimum="@(DateTime.Now)" />
+            </div>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton type="button" OnClick="@SaveNewRate" >Uložit</MatButton>
+            <MatButton type="button" OnClick="@(e => { IsNewRateDialog = false; })">Storno</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+</EditForm>
+@code {
+    [Parameter] public Vat vat { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Uložit";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public EventCallback OnValidCancel { get; set; }
+
+    private bool IsNewRateDialog { get; set; }
+    private int NewRate { get; set; }
+    private DateTime NewDateFrom { get; set; }
+
+    private string rate
+    {
+        get => $"{vat.ActualRate} %";
+        set {}
+    }
+    void Cancel()
+    {
+        OnValidCancel.InvokeAsync();
+    }
+    void CreateNewRate()
+    {
+        NewRate = 0;
+        NewDateFrom = DateTime.Now;
+        IsNewRateDialog = true;
+    }
+
+    void SaveNewRate()
+    {
+        if (vat.VatHistories == null)
+            vat.VatHistories = new List<VatHistory>();
+        if (vat.VatHistories != null /*&& vat.VatHistories.Any(h => h.ValidTo >= NewDateFrom || h.ValidTo == null)*/)
+            vat.VatHistories?.Where(h => h.ValidTo >= NewDateFrom || h.ValidTo == null).ToList()?.ForEach(i => i.ValidTo = NewDateFrom);
+        vat.VatHistories.Add(new VatHistory { ValidFrom = NewDateFrom, Rate = NewRate, Vat = vat, VatId = vat.Id });
+
+        IsNewRateDialog = false;
+    }
+}

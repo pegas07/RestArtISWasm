@@ -1,0 +1,70 @@
+﻿<EditForm Model="@bp" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group ">
+        <div>
+            <MatTextField Label="Zkratka" FullWidth="true" @bind-Value="@bp.Code"></MatTextField>            
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Název :</label>
+        <div>
+            <InputText @bind-Value="@bp.Name" />
+            <ValidationMessage For="@(() => bp.Name)" />
+        </div>
+    </div>
+
+    <div class="form-group ">
+        <div>
+            <label>IČ :</label>
+            <div>
+                <InputText @bind-Value="@bp.ICO" />
+                <ValidationMessage For="@(() => bp.ICO)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>DIČ :</label>
+            <div>
+                <InputText @bind-Value="@bp.DIC" />
+                <ValidationMessage For="@(() => bp.DIC)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Tel :</label>
+            <div>
+                <InputText @bind-Value="@bp.Phone" />
+                <ValidationMessage For="@(() => bp.Phone)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Email :</label>
+            <div>
+                <InputText @bind-Value="@bp.Email" />
+                <ValidationMessage For="@(() => bp.Email)" />
+            </div>
+        </div>
+    </div>
+    @*<div class="form-group ">
+        <div>
+            <label>Pořadí :</label>
+            <div>
+                <InputText @bind-Value="@bp.Order.ToString()" />
+                <ValidationMessage For="@(() => bp.Order)" />
+            </div>
+        </div>
+    </div>*@
+
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+</EditForm>
+@code {
+    [Parameter] public BusinessPartner bp { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Uložit";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

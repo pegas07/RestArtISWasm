@@ -1,0 +1,28 @@
+@page "/vat/edit/{vatId:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+<h3>Změnit</h3>
+<Form ButtonText="Změnit sazbu DPH" vat="@vat"
+      OnValidSubmit="@EditVat"
+      OnValidCancel="@Cancel" />
+@code {
+    [Parameter] public int vatId { get; set; }
+    Vat vat = new Vat();
+    protected async override Task OnParametersSetAsync()
+    {
+        vat = await http.GetFromJsonAsync<Vat>($"api/vat/{vatId}");
+    }
+    async Task EditVat()
+    {
+        await http.PutAsJsonAsync("api/vat", vat);
+        
+        await js.InvokeVoidAsync("alert", $"Updated Successfully!");
+        uriHelper.NavigateTo("vat");
+    }
+    void Cancel()
+    {
+        uriHelper.NavigateTo("vat");
+    }
+
+}

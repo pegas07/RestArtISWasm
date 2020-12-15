@@ -1,0 +1,36 @@
+﻿@inject HttpClient client
+
+<EditForm Model="@mc" OnValidSubmit="@OnValidSubmit">
+    <p>
+        <MatTextField Label="Název" @bind-Value="@mc.Name"></MatTextField>
+    </p>
+    <p>
+        <MatSelectValue Label="Typ menu" Items="@menuTypes"ValueSelector="@(i=>i.Id)" @bind-Value="@mc.MenuTypeId">
+            <ItemTemplate Context="msvContext"><span>@msvContext.Name</span></ItemTemplate>
+        </MatSelectValue>
+    </p>
+    <p>
+        <MatCheckbox Label="Rozvoz" @bind-Value="@mc.IsDelivery"></MatCheckbox>
+    </p>
+    <MatButton type="submit" class="btn btn-primary" >@ButtonText</MatButton>
+    <MatButton OnClick="@Cancel">Storno</MatButton>
+</EditForm>
+
+@code {
+    [Parameter] public MenuCategory mc { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Uložit";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public EventCallback OnValidCancel { get; set; }
+    [Parameter] public List<MenuType> menuTypes { get; set; } = new List<MenuType>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var mt = await client.GetFromJsonAsync<MenuType[]>("api/menutype");
+        menuTypes = mt.ToList();
+    }
+    void Cancel()
+    {
+        OnValidCancel.InvokeAsync();
+        //navigation.NavigateTo("/menucategory");
+    }
+}

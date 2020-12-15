@@ -1,0 +1,58 @@
+@page "/vat"
+@inject HttpClient client
+@inject IJSRuntime js
+@inject NavigationManager uriHelper
+<h3>DPH</h3>
+<div class="form-group">
+    <a class="btn btn-success" href="vat/create"><i class="oi oi-plus"></i> Nová</a>
+</div>
+<br>
+
+@if (vats == null)
+{
+    <text>Loading...</text>
+}
+else if (vats.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <MatTable Items="@vats" LoadInitialData="true">
+        <MatTableHeader>
+            <th>Id</th>
+            <th>Název</th>
+            <th>Sazba</th>
+            <th></th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td>@context.Id</td>
+            <td>@context.Name</td>
+            <td>@context.ActualRate</td>
+            <td>
+                <MatIconButton Icon="edit" OnClick="@(() => Edit(context.Id))" />
+                <MatIconButton Icon="delete" OnClick="@(() => Delete(context.Id))" />
+            </td>
+        </MatTableRow>
+    </MatTable>
+}
+@code {
+    Vat[] vats { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        vats = await client.GetFromJsonAsync<Vat[]>("api/vat");
+    }
+    async Task Delete(int vatId)
+    {
+        var vat = vats.First(x => x.Id == vatId);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {vat.Name}'s ({vat.Id}) Record?"))
+        {
+            await client.DeleteAsync($"api/vat/{vatId}");
+            await OnInitializedAsync();
+        }
+    }
+    void Edit(int vatId)
+    {
+        uriHelper.NavigateTo($"vat/edit/{vatId}");
+    }
+}

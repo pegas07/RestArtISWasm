@@ -1,0 +1,60 @@
+﻿@page "/menucategory"
+@inject HttpClient client
+@inject IJSRuntime js
+@inject NavigationManager uriHelper
+<h3>Kategorie menu</h3>
+<div class="form-group">
+    <a class="btn btn-success" href="menucategory/create"><i class="oi oi-plus"></i> Nová</a>
+</div>
+<br>
+
+@if (menuCategories == null)
+{
+    <text>Loading...</text>
+}
+else if (menuCategories.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <MatTable Items="@menuCategories" LoadInitialData="true">
+        <MatTableHeader>
+            <th>Název</th>
+            <th>Typ menu</th>
+            <th>Rozvoz</th>
+            <th/>
+        </MatTableHeader>
+        <MatTableRow>
+            <td>@context.Name</td>
+            <td>@context.MenuType?.Name</td>
+            <td>
+                <MatCheckbox @bind-Value="@context.IsDelivery" Disabled="true"/>
+            </td>
+            <td>
+                <MatIconButton Icon="edit" OnClick="@(() => Edit(context.Id))"/>
+                <MatIconButton Icon="delete" OnClick="@(() => Delete(context.Id))" />
+            </td>
+        </MatTableRow>
+    </MatTable>
+}
+@code {
+    MenuCategory[] menuCategories { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        menuCategories = await client.GetFromJsonAsync<MenuCategory[]>("api/menucategory");
+    }
+    async Task Delete(int menuCategoryId)
+    {
+        var mc = menuCategories.First(x => x.Id == menuCategoryId);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {mc.Name}'s ({mc.Id}) Record?"))
+        {
+            await client.DeleteAsync($"api/menucategory/{menuCategoryId}");
+            await OnInitializedAsync();
+        }
+    }
+    void Edit(int menuCategoryId)
+    {
+        uriHelper.NavigateTo($"menucategory/edit/{menuCategoryId}");
+    }
+}

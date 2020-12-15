@@ -1,0 +1,14 @@
+﻿@page "/address/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+<h3>Nová adresa</h3>
+<Form ButtonText="Vytvořit adresu" addr="@addr"
+      OnValidSubmit="@CreateAddress" />
+@code {
+    Address addr = new Address();
+    async Task CreateAddress()
+    {
+        await http.PostAsJsonAsync("api/address", addr);
+        uriHelper.NavigateTo("address");
+    }
+}

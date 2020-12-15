@@ -1,0 +1,62 @@
+﻿@page "/address"
+@inject HttpClient client
+@inject IJSRuntime js
+<h3>Adresy</h3>
+<div class="form-group">
+    <a class="btn btn-success" href="address/create"><i class="oi oi-plus"></i> Nová</a>
+</div>
+<br>
+@if (addresses == null)
+{
+    <text>Loading...</text>
+}
+else if (addresses.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Street</th>
+                <th>City</th>
+                <th>Zip Code</th>
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Address addr in addresses)
+            {
+                <tr>
+                    <td>@addr.Id</td>
+                    <td>@addr.Street</td>
+                    <td>@addr.City</td>
+                    <td>@addr.ZipCode</td>
+                    <td>
+                        <a class="btn btn-success" href="address/edit/@addr.Id">Edit</a>
+                        <button class="btn btn-danger" @onclick="@(() => Delete(addr.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    Address[] addresses { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        addresses = await client.GetFromJsonAsync<Address[]>("api/address");
+    }
+    async Task Delete(int addressId)
+    {
+        var addr = addresses.First(x => x.Id == addressId);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {addr.Street}'s ({addr.Id}) Record?"))
+        {
+            await client.DeleteAsync($"api/address/{addressId}");
+            await OnInitializedAsync();
+        }
+    }
+}

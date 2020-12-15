@@ -1,0 +1,62 @@
+﻿@page "/businesspartner"
+@inject HttpClient client
+@inject IJSRuntime js
+<h3>Obchodní partneři</h3>
+<div class="form-group">
+    <a class="btn btn-success" href="businesspartner/create"><i class="oi oi-plus"></i> Nový</a>
+</div>
+<br>
+@if (businessPartners == null)
+{
+    <text>Loading...</text>
+}
+else if (businessPartners.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Zkratka</th>
+                <th>Název</th>
+                <th>Pořadí</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (BusinessPartner bp in businessPartners)
+            {
+                <tr>
+                    <td>@bp.Id</td>
+                    <td>@bp.Code</td>
+                    <td>@bp.Name</td>
+                    <td>@bp.Order</td>
+                    <td>
+                        <a class="btn btn-success" href="businesspartner/edit/@bp.Id">Edit</a>
+                        <button class="btn btn-danger" @onclick="@(() => Delete(bp.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    BusinessPartner[] businessPartners { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        businessPartners = await client.GetFromJsonAsync<BusinessPartner[]>("api/businesspartner");
+    }
+    async Task Delete(int businessPartnerId)
+    {
+        var bp = businessPartners.First(x => x.Id == businessPartnerId);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {bp.Name}'s ({bp.Id}) Record?"))
+        {
+            await client.DeleteAsync($"api/businesspartner/{businessPartnerId}");
+            await OnInitializedAsync();
+        }
+    }
+}

@@ -1,0 +1,70 @@
+﻿@page "/settings"
+@inject HttpClient client
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+
+
+<style>
+    form .row {
+        margin-bottom: 16px;
+    }
+</style>
+
+<h3>Nastavení</h3>
+
+@if (settings == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@settings" OnValidSubmit="Submit">
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+            <p>
+                <MatTextField Label="Název" FullWidth="true" @bind-Value="@settings.Name"></MatTextField>
+            </p>
+            <p>
+                <MatTextField Label="Email" FullWidth="true" @bind-Value="@settings.Email"></MatTextField>
+            </p>
+            <p>
+                <MatTextField Label="Tel" FullWidth="true" @bind-Value="@settings.Phone"></MatTextField>
+            </p>
+            <p>
+                <MatTextField Label="IČO" FullWidth="true" @bind-Value="@settings.ICO"></MatTextField>
+            </p>
+            <p>
+                <MatTextField Label="DIČ" FullWidth="true" @bind-Value="@settings.DIC"></MatTextField>
+            </p>
+            <fieldset>
+                <legend>Adresy</legend>
+                <p>
+                    <MatCheckbox Label="Dodací adresa stejná jako fakturační" @bind-Value="@settings.MailingAddressSameAsBillingAddress"/>
+                </p>
+            </fieldset>
+        </div>
+
+        <MatButton type="submit">Uložit</MatButton>
+        <MatButton type="button" OnClick="@Cancel">Storno</MatButton>
+    </EditForm>    
+}
+
+@code {
+    Settings settings { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var s = await client.GetFromJsonAsync<Settings[]>("api/settings");
+        settings = s.FirstOrDefault();
+    }
+    
+    async Task Submit()
+    {
+        await client.PutAsJsonAsync("api/settings", settings);
+    }
+
+    async Task Cancel()
+    {
+        var s = await client.GetFromJsonAsync<Settings[]>("api/settings");
+        settings = s.FirstOrDefault();
+    }
+}
