@@ -1,0 +1,28 @@
+<MatAppBar Style="z-index: 100;" Class="mat">
+    <MatAppBarRow>
+        <MatAppBarSection>
+            <MatIconButton Icon="menu" OnClick="@((e) => MenuButtonClicked())"></MatIconButton>
+            <MatHidden BreakPoint="@MatBreakpoint.XS" Direction="@MatHiddenDirection.Down">
+                <MatAppBarTitle>Nazev App</MatAppBarTitle>
+            </MatHidden>
+            <MatHidden BreakPoint="@MatBreakpoint.SM" Direction="@MatHiddenDirection.Up">
+                <MatAppBarTitle>RestArtIS</MatAppBarTitle>
+            </MatHidden>
+            <LoginDisplay />
+        </MatAppBarSection>
+    </MatAppBarRow>
+</MatAppBar>
+
+
+
+
+@code {
+
+    bool _navMenuOpened = true;
+
+    void MenuButtonClicked()
+    {
+        _navMenuOpened = !_navMenuOpened;
+        this.StateHasChanged();
+    }
+}

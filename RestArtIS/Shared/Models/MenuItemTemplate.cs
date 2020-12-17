@@ -7,7 +7,7 @@ namespace RestArtIS.Shared.Models
 {
     public class MenuItemTemplate : BaseEntity
     {
-        [StringLength(2)]
+        [StringLength(20)]
         public string Code { get; set; }
         [StringLength(200)]
         public string Name { get; set; }
