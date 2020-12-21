@@ -10,7 +10,7 @@
 
 @if (vats == null)
 {
-    <text>Loading...</text>
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
 }
 else if (vats.Length == 0)
 {
@@ -18,6 +18,9 @@ else if (vats.Length == 0)
 }
 else
 {
+    @*<MudTable Items="@vats" >
+
+    </MudTable>*@
     <MatTable Items="@vats" LoadInitialData="true">
         <MatTableHeader>
             <th>Id</th>
