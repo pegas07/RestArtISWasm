@@ -25,6 +25,11 @@
             </MudMainContent>
         </MudLayout>
     </Authorized>
+    <NotAuthorized>
+        @*Just render the body so that RedirectToLogin works*@
+        @Body
+    </NotAuthorized>
+
 </AuthorizeView>
 @*<div class="page">
         <div class="sidebar">
