@@ -13,6 +13,8 @@
     protected async override Task OnParametersSetAsync()
     {
         menu = await http.GetFromJsonAsync<Menu>($"api/menu/{menuId}");
+        var menuCategory = await http.GetFromJsonAsync<MenuCategory>($"api/menucategory/{menu.MenuCategoryId}");
+        menu.MenuCategory = menuCategory;
         var mc = await http.GetFromJsonAsync<MenuCategory[]>("api/menucategory");
         menuCategories = mc.ToList();
     }

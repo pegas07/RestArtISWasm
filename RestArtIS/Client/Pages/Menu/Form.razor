@@ -28,9 +28,17 @@
                                         {
                                             <MudListItem>
                                                 <ChildContent>
-                                                    <MudPaper >
-                                                        <MudTextField Class="d-inline-flex" Label="Množství" @bind-Value="mi.Amount" For="() => mi.Amount" />
-                                                    </MudPaper>
+                                                    <MudGrid>
+                                                        <MudItem xs="2">
+                                                            <MudTextField Class="d-inline-flex" Label="Množství" @bind-Value="mi.Amount" For="() => mi.Amount" />
+                                                        </MudItem> 
+                                                        <MudItem xs="8">
+                                                            <MudTextField Class="d-inline-flex" Label="Název" @bind-Value="mi.Name" For="() => mi.Name" />
+                                                        </MudItem> 
+                                                        <MudItem xs="2">
+                                                            <MudTextField Class="d-inline-flex" Label="Cena" @bind-Value="mi.Price" For="() => mi.Price" />
+                                                        </MudItem>                                                        
+                                                    </MudGrid>
                                                 </ChildContent>
                                             </MudListItem>
                                         }
