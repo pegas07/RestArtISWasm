@@ -1,10 +1,14 @@
 ﻿<MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Home">Úvod</MudNavLink>
+    <MudNavGroup Title="Jídelní lístky" Icon="@Icons.Material.RestaurantMenu">
+        <MudNavLink Href="/menu" Icon="@Icons.Material.FoodBank">Jídelní lístky</MudNavLink>
+        <MudNavLink Href="/menucategory" Icon="@Icons.Material.Bento">Kategorie menu</MudNavLink>
+        <MudNavLink Href="/menuitemcategory" Icon="@Icons.Material.Dns">Kategorie položky menu</MudNavLink>
+    </MudNavGroup>
     <MudNavGroup Title="Nastavení" Icon="@Icons.Material.Settings" Expanded="true" >
         <MudNavLink Href="/settings" Icon="@Icons.Material.Settings">Nastavení</MudNavLink>
         <MudNavLink Href="/address" Icon="@Icons.Material.Settings">Adresy</MudNavLink>
-        <MudNavLink Href="/vat" Icon="@Icons.Material.Settings">DPH</MudNavLink>
-        <MudNavLink Href="/menucategory" Icon="@Icons.Material.Settings">Kategorie menu</MudNavLink>
+        <MudNavLink Href="/vat" Icon="@Icons.Material.Settings">DPH</MudNavLink>        
     </MudNavGroup>
     <MudNavLink></MudNavLink>
 </MudNavMenu>

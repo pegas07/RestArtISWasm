@@ -1,0 +1,29 @@
+﻿@page "/menu/create/{menuCategoryId:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+<h3>Nový jídelní lístek</h3>
+<Form ButtonText="Vytvořit jídelní lístek" menu="@menu"
+      OnValidSubmit="@CreateMenu"
+      OnValidCancel="@Cancel" />
+@code {
+    [Parameter] public int menuCategoryId { get; set; }
+    Menu menu = new Menu();
+    MenuCategory menuCategory;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        menuCategory = await http.GetFromJsonAsync<MenuCategory>($"api/menucategory/{menuCategoryId}");
+        menu.MenuCategory = menuCategory;
+    }
+
+    async Task CreateMenu()
+    {
+        await http.PostAsJsonAsync("api/menu", menu);
+        uriHelper.NavigateTo("menu");
+    }
+
+    void Cancel()
+    {
+        uriHelper.NavigateTo("menu");
+    }
+}

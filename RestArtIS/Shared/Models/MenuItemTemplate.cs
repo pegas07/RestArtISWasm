@@ -9,7 +9,7 @@ namespace RestArtIS.Shared.Models
     {
         [StringLength(20)]
         public string Code { get; set; }
-        [StringLength(200)]
+        [StringLength(2000)]
         public string Name { get; set; }
         public MenuCategory MenuCategory { get; set; }
         [StringLength(20)]

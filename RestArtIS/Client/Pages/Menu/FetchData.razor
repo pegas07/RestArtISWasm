@@ -1,0 +1,74 @@
+﻿@page "/menu"
+@inject HttpClient client
+@inject IJSRuntime js
+@inject NavigationManager uriHelper
+<h3>Jídelní lístky</h3>
+@*<div class="form-group">
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewButtonClick">Nový jídelní lístek</MudButton>
+</div>*@
+<div class="form-group">
+    @foreach (var cat in menuCategories)
+    {
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="@(e => NewButtonClick(cat.Id))">@($"Nový jídelní lístek {cat.Name}")</MudButton>
+    }
+</div>
+@if (menus == null)
+{
+    <text>Loading...</text>
+}
+else if (menus.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <MudTable Items="@menus" Hover="true">
+        <HeaderContent>
+            <MudTh>Název</MudTh>
+            <MudTh />
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Edit" OnClick="@(() => Edit(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Delete" OnClick="@(() => Delete(context.Id))" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100, 500 }" RowsPerPageString="Počet záznamů na stránku:" InfoFormat="{first_item} - {last_item} z {all_items}" />
+        </PagerContent>
+    </MudTable>
+}
+@code {
+
+    @code {
+        Menu[] menus { get; set; }
+        List<MenuCategory> menuCategories { get; set; } = new List<MenuCategory>();
+
+        protected override async Task OnInitializedAsync()
+        {
+            var mc = await client.GetFromJsonAsync<MenuCategory[]>("api/menucategory");
+            menuCategories = mc.ToList();
+            menus = await client.GetFromJsonAsync<Menu[]>("api/menu");
+        }
+
+        void NewButtonClick(int categoryId)
+        {
+            uriHelper.NavigateTo($"menu/create/{categoryId}");
+        }
+
+        async Task Delete(int menuId)
+        {
+            var m = menus.First(x => x.Id == menuId);
+            if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {m.Name}'s ({m.Id}) Record?"))
+            {
+                await client.DeleteAsync($"api/menu/{menuId}");
+                await OnInitializedAsync();
+            }
+        }
+        void Edit(int menuId)
+        {
+            uriHelper.NavigateTo($"menu/edit/{menuId}");
+        }
+    }
+}

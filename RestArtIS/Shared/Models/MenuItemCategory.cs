@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RestArtIS.Shared.Models
 {
-    public enum MenuTypes { Day = 1, Week = 2, Permanent = 3 }
-    public class Menu : BaseEntity
+    public class MenuItemCategory : BaseEntity
     {
         [StringLength(500)]
         public string Name { get; set; }
-        public DateTime? DateFrom { get; set; }
-        public DateTime? DateTo { get; set; }
-        [ForeignKey("MenuCategory")]
+        [ForeignKey("MenuCategory")]        
         public int? MenuCategoryId { get; set; }
 
         private MenuCategory menuCategory;
+        [System.Text.Json.Serialization.JsonIgnore]
         public virtual MenuCategory MenuCategory
         {
             get => menuCategory;
@@ -26,9 +26,6 @@ namespace RestArtIS.Shared.Models
                 MenuCategoryId = menuCategory?.Id;
             }
         }
-        public bool MenuCategory_IsReadOnly => Id != 0 && MenuCategoryId != null;
-        public bool IsDelivery { get; set; }
-
-        public ICollection<MenuItem> MenuItems { get; set; }
+        public int CategoryOrder { get; set; }
     }
 }

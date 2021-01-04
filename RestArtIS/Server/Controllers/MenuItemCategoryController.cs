@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestArtIS.Server.Data;
 using RestArtIS.Shared.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RestArtIS.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MenuCategoryController : ControllerBase
+    public class MenuItemCategoryController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
-        public MenuCategoryController(ApplicationDbContext context)
+        public MenuItemCategoryController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -24,29 +23,28 @@ namespace RestArtIS.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var devs = await _context.MenuCategories.Include(mc => mc.MenuType).Include(mic => mic.MenuItemCategories).ToListAsync();
+            var devs = await _context.MenuItemCategories.ToListAsync();
             return Ok(devs);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var mc = await _context.MenuCategories.Include(mc => mc.MenuType).Include(mic => mic.MenuItemCategories).FirstOrDefaultAsync(a => a.Id == id);
+            var mc = await _context.MenuItemCategories.FirstOrDefaultAsync(a => a.Id == id);
             return Ok(mc);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(MenuCategory menuCategory)
+        public async Task<IActionResult> Post(MenuItemCategory menuItemCategory)
         {
-            menuCategory.MenuType = _context.MenuTypes.FirstOrDefault(a => a.Id == menuCategory.MenuTypeId);
-            _context.Add(menuCategory);
+            _context.Add(menuItemCategory);
             await _context.SaveChangesAsync();
-            return Ok(menuCategory.Id);
+            return Ok(menuItemCategory.Id);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(MenuCategory menuCategory)
+        public async Task<IActionResult> Put(MenuItemCategory menuItemCategory)
         {
-            _context.Update(menuCategory);
+            _context.Entry(menuItemCategory).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return NoContent();
         }

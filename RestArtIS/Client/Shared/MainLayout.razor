@@ -1,18 +1,16 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager navigationManager
-@inject IdentityAuthenticationStateProvider authStateProvider
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<AuthorizeView>
-    <Authorized>
+@*<AuthorizeView>
+    <Authorized>*@
         <MudLayout>
             <MudAppBar Elevation="1">
                 <MudIconButton Icon="@Icons.Material.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                 <MudAppBarSpacer />
-                <LoginDisplay />
+                @*<LoginDisplay />*@
             </MudAppBar>
             <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
                 <MudDrawerHeader>
@@ -24,28 +22,15 @@
                 @Body
             </MudMainContent>
         </MudLayout>
-    </Authorized>
+    @*</Authorized>
     <NotAuthorized>
-        @*Just render the body so that RedirectToLogin works*@
-        @Body
+        <MudMainContent>
+            @Body
+        </MudMainContent>
     </NotAuthorized>
 
-</AuthorizeView>
-@*<div class="page">
-        <div class="sidebar">
-            <NavMenu />
-        </div>
+</AuthorizeView>*@
 
-        <div class="main">
-            <div class="top-row px-4 auth">
-                <TopAppBar />
-            </div>
-
-            <div class="content px-4">
-                @Body
-            </div>
-        </div>
-    </div>*@
 
 @code {
     bool _drawerOpen = true;
@@ -53,13 +38,5 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
-    }
-}
-@functions{
-
-    async Task LogoutClick()
-    {
-        await authStateProvider.Logout();
-        navigationManager.NavigateTo("/login");
     }
 }

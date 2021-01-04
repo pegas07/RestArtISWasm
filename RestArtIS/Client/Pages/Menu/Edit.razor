@@ -1,0 +1,29 @@
+﻿@page "/menu/edit/{menuId:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+<h3>Změna jídelního lístku</h3>
+<Form ButtonText="Změnit jídelní lístek" menu="@menu" menuCategories="@menuCategories"
+      OnValidSubmit="@EditMenu"
+      OnValidCancel="@Cancel" />
+@code {
+    [Parameter] public int menuId { get; set; }
+    Menu menu = new Menu();
+    private List<MenuCategory> menuCategories { get; set; } = new List<MenuCategory>();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        menu = await http.GetFromJsonAsync<Menu>($"api/menu/{menuId}");
+        var mc = await http.GetFromJsonAsync<MenuCategory[]>("api/menucategory");
+        menuCategories = mc.ToList();
+    }
+    async Task EditMenu()
+    {
+        await http.PutAsJsonAsync("api/menu", menu);
+        uriHelper.NavigateTo("menu");
+    }
+
+    void Cancel()
+    {
+        uriHelper.NavigateTo("menu");
+    }
+}

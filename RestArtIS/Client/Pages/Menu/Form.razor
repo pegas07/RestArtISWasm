@@ -1,0 +1,75 @@
+﻿@inject HttpClient client
+
+<EditForm Model="@menu" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div>
+        <MudTextField Label="Název" @bind-Value="menu.Name" />      
+        <MudSelect Label="Kategorie menu" @bind-Value="menu.MenuCategory" T="MenuCategory" Text="@menu?.MenuCategory?.Name" OffsetY="true"
+                   Required="true" RequiredError="Kategorie menu je povinná položka" ToStringFunc="@converter" ReadOnly="menu.MenuCategory_IsReadOnly">
+            @foreach (MenuCategory mc in menuCategories)
+            {
+                <MudSelectItem T="MenuCategory" Value="mc">@mc.Name</MudSelectItem>
+            }
+        </MudSelect>
+        @if (menu.MenuCategory != null)
+        {
+            if (menu.MenuCategory?.MenuTypeId == (int)MenuTypes.Permanent)
+            {
+                <MudExpansionPanels MultiExpansion="true">
+                    @foreach (var mic in menu.MenuCategory.MenuItemCategories)
+                    {
+                        <MudExpansionPanel IsExpanded="true">
+                            <TitleContent><strong>@mic.Name</strong></TitleContent>
+                            <ChildContent>
+                                <MudList>
+                                    @if (menu.MenuItems != null)
+                                    {
+                                        foreach (var mi in menu.MenuItems.Where(m => m.MenuItemCategoryId == mic.Id))
+                                        {
+                                            <MudListItem>
+                                                <ChildContent>
+                                                    <MudPaper >
+                                                        <MudTextField Class="d-inline-flex" Label="Množství" @bind-Value="mi.Amount" For="() => mi.Amount" />
+                                                    </MudPaper>
+                                                </ChildContent>
+                                            </MudListItem>
+                                        }
+                                    }
+                                    <MudFab Color="Color.Success" Icon="@Icons.Material.Add" Size="Size.Small" OnClick="@(() => AddMenuItem(mic))" />
+                                </MudList>
+                            </ChildContent>
+                        </MudExpansionPanel>
+                    }
+                </MudExpansionPanels>
+            }
+        }
+    </div>
+    <MudButton ButtonType="ButtonType.Submit">@ButtonText</MudButton>
+    <MudButton OnClick="Cancel">Storno</MudButton>
+</EditForm>
+@code {
+    [Parameter] public Menu menu { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Uložit";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public EventCallback OnValidCancel { get; set; }
+    [Parameter] public List<MenuCategory> menuCategories { get; set; } = new List<MenuCategory>();
+
+    Func<MenuCategory, string> converter = m => m.Name;
+    protected override async Task OnInitializedAsync()
+    {
+        var mc = await client.GetFromJsonAsync<MenuCategory[]>("api/menucategory");
+        menuCategories = mc.ToList();
+    }
+    void Cancel()
+    {
+        OnValidCancel.InvokeAsync();
+        //navigation.NavigateTo("/menucategory");
+    }
+
+    void AddMenuItem(MenuItemCategory menuItemCategory)
+    {
+        if (menu.MenuItems == null)
+            menu.MenuItems = new List<MenuItem>();
+        menu.MenuItems.Add(new MenuItem { Menu = menu, MenuItemCategory = menuItemCategory });
+    }
+}

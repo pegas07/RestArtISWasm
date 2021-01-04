@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestArtIS.Server.Data;
 
 namespace RestArtIS.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210102230500_MenuItemCategory_Order")]
+    partial class MenuItemCategory_Order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -598,15 +600,6 @@ namespace RestArtIS.Server.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("MenuId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MenuItemCategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -615,10 +608,6 @@ namespace RestArtIS.Server.Data.Migrations
                         .HasColumnType("decimal(4,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MenuId");
-
-                    b.HasIndex("MenuItemCategoryId");
 
                     b.ToTable("MenuItems");
                 });
@@ -883,21 +872,6 @@ namespace RestArtIS.Server.Data.Migrations
                     b.Navigation("MenuType");
                 });
 
-            modelBuilder.Entity("RestArtIS.Shared.Models.MenuItem", b =>
-                {
-                    b.HasOne("RestArtIS.Shared.Models.Menu", "Menu")
-                        .WithMany("MenuItems")
-                        .HasForeignKey("MenuId");
-
-                    b.HasOne("RestArtIS.Shared.Models.MenuItemCategory", "MenuItemCategory")
-                        .WithMany()
-                        .HasForeignKey("MenuItemCategoryId");
-
-                    b.Navigation("Menu");
-
-                    b.Navigation("MenuItemCategory");
-                });
-
             modelBuilder.Entity("RestArtIS.Shared.Models.MenuItemCategory", b =>
                 {
                     b.HasOne("RestArtIS.Shared.Models.MenuCategory", "MenuCategory")
@@ -940,11 +914,6 @@ namespace RestArtIS.Server.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Vat");
-                });
-
-            modelBuilder.Entity("RestArtIS.Shared.Models.Menu", b =>
-                {
-                    b.Navigation("MenuItems");
                 });
 
             modelBuilder.Entity("RestArtIS.Shared.Models.MenuCategory", b =>

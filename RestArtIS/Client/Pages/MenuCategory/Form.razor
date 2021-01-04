@@ -1,19 +1,47 @@
 ﻿@inject HttpClient client
-
 <EditForm Model="@mc" OnValidSubmit="@OnValidSubmit">
-    <p>
-        <MatTextField Label="Název" @bind-Value="@mc.Name"></MatTextField>
-    </p>
-    <p>
-        <MatSelectValue Label="Typ menu" Items="@menuTypes"ValueSelector="@(i=>i.Id)" @bind-Value="@mc.MenuTypeId">
-            <ItemTemplate Context="msvContext"><span>@msvContext.Name</span></ItemTemplate>
-        </MatSelectValue>
-    </p>
-    <p>
-        <MatCheckbox Label="Rozvoz" @bind-Value="@mc.IsDelivery"></MatCheckbox>
-    </p>
-    <MatButton type="submit" class="btn btn-primary" >@ButtonText</MatButton>
-    <MatButton OnClick="@Cancel">Storno</MatButton>
+    <DataAnnotationsValidator />
+    <MudCard Class="ma-2 pa-1">
+        <MudTextField Label="Název" @bind-Value="@mc.Name" For="@(() => mc.Name)" Required="true" RequiredError="Název je povinná položka" />
+        <MudSelect Label="Typ menu" @bind-Value="@mc.MenuType" T="MenuType" Text="@mc?.MenuType?.Name" OffsetY="true"
+                   Required="true" RequiredError="Typ menu je povinná položka" ToStringFunc="@converter" For="@(() => mc.MenuType)">
+            @foreach (MenuType mt in menuTypes)
+            {
+                <MudSelectItem T="MenuType" Value="@mt">@mt.Name</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSwitch Label="Rozvoz" @bind-Checked="@mc.IsDelivery" Color="Color.Primary" />
+
+        <MudTable Items="mc.MenuItemCategories">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Kategorie položek menu</MudText>
+                <MudToolBarSpacer />
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewMenuItemCategory">Nová</MudButton>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Název</MudTh>
+                <MudTh>Pořadí</MudTh>
+            </HeaderContent>
+            <RowTemplate Context="rowContext">
+                <MudTd DataLabel="Název">@rowContext.Name</MudTd>
+                <MudTd DataLabel="Pořadí">@rowContext.CategoryOrder</MudTd>
+            </RowTemplate>
+            <RowEditingTemplate Context="rowContext">
+                <MudTd>
+                    <MudTextField @bind-Value="@rowContext.Name" />
+                </MudTd>
+                <MudTd>
+                    <MudTextField @bind-Value="@rowContext.CategoryOrder" />
+                </MudTd>                
+            </RowEditingTemplate>
+        </MudTable>
+
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit">@ButtonText</MudButton>
+            <MudButton OnClick="Cancel">Storno</MudButton>
+        </MudCardActions>
+    </MudCard>
+
 </EditForm>
 
 @code {
@@ -22,6 +50,8 @@
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public EventCallback OnValidCancel { get; set; }
     [Parameter] public List<MenuType> menuTypes { get; set; } = new List<MenuType>();
+
+    Func<MenuType, string> converter = m => m.Name;
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,5 +62,13 @@
     {
         OnValidCancel.InvokeAsync();
         //navigation.NavigateTo("/menucategory");
+    }
+
+    void NewMenuItemCategory()
+    {
+        MenuItemCategory mci = new MenuItemCategory() { MenuCategory = mc };
+        if (mc.MenuItemCategories == null)
+            mc.MenuItemCategories = new List<MenuItemCategory>();
+        mc.MenuItemCategories.Add(mci);
     }
 }

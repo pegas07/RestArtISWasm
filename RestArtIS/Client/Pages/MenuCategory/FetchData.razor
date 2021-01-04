@@ -4,7 +4,7 @@
 @inject NavigationManager uriHelper
 <h3>Kategorie menu</h3>
 <div class="form-group">
-    <a class="btn btn-success" href="menucategory/create"><i class="oi oi-plus"></i> Nová</a>
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewMenuCategory">Nová</MudButton>
 </div>
 <br>
 
@@ -18,25 +18,25 @@ else if (menuCategories.Length == 0)
 }
 else
 {
-    <MatTable Items="@menuCategories" LoadInitialData="true">
-        <MatTableHeader>
-            <th>Název</th>
-            <th>Typ menu</th>
-            <th>Rozvoz</th>
-            <th/>
-        </MatTableHeader>
-        <MatTableRow>
-            <td>@context.Name</td>
-            <td>@context.MenuType?.Name</td>
-            <td>
-                <MatCheckbox @bind-Value="@context.IsDelivery" Disabled="true"/>
-            </td>
-            <td>
-                <MatIconButton Icon="edit" OnClick="@(() => Edit(context.Id))"/>
-                <MatIconButton Icon="delete" OnClick="@(() => Delete(context.Id))" />
-            </td>
-        </MatTableRow>
-    </MatTable>
+    <MudTable Items="@menuCategories" Hover="true">
+        <HeaderContent>
+            <MudTh>Název</MudTh>
+            <MudTh>Typ menu</MudTh>
+            <MudTh>Rozvoz</MudTh>
+            <MudTh />
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.MenuType?.Name</MudTd>
+            <MudTd>
+                <MudCheckBox T="bool" Disabled="true" @bind-Checked="@context.IsDelivery" />
+            </MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Edit" OnClick="@(() => Edit(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Delete" OnClick="@(() => Delete(context.Id))" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 }
 @code {
     MenuCategory[] menuCategories { get; set; }
@@ -44,6 +44,12 @@ else
     {
         menuCategories = await client.GetFromJsonAsync<MenuCategory[]>("api/menucategory");
     }
+
+    void NewMenuCategory()
+    {
+        uriHelper.NavigateTo($"menucategory/create");
+    }
+
     async Task Delete(int menuCategoryId)
     {
         var mc = menuCategories.First(x => x.Id == menuCategoryId);
