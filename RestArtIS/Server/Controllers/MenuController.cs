@@ -29,7 +29,10 @@ namespace RestArtIS.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var dev = await _context.Menus.Include(m => m.MenuCategory).ThenInclude(mc => mc.MenuType).FirstOrDefaultAsync(a => a.Id == id);
+            var dev = await _context.Menus
+                .Include(m => m.MenuCategory)
+                    .ThenInclude(mc => mc.MenuType)
+                .Include(mi => mi.MenuItems).FirstOrDefaultAsync(a => a.Id == id);
             return Ok(dev);
         }
 
@@ -67,7 +70,8 @@ namespace RestArtIS.Server.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Menu menu)
         {
-            _context.Entry(menu).State = EntityState.Modified;
+            //_context.Entry(menu).State = EntityState.Modified;
+            _context.Update(menu);
             await _context.SaveChangesAsync();
             return NoContent();
         }

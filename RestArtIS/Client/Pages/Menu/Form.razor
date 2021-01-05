@@ -29,15 +29,18 @@
                                             <MudListItem>
                                                 <ChildContent>
                                                     <MudGrid>
-                                                        <MudItem xs="2">
-                                                            <MudTextField Class="d-inline-flex" Label="Množství" @bind-Value="mi.Amount" For="() => mi.Amount" />
+                                                        <MudItem xs="2" md="1">
+                                                            <MudTextField Class="d-inline-flex" Placeholder="Množství" @bind-Value="mi.Amount" For="() => mi.Amount" />
                                                         </MudItem> 
-                                                        <MudItem xs="8">
-                                                            <MudTextField Class="d-inline-flex" Label="Název" @bind-Value="mi.Name" For="() => mi.Name" />
+                                                        <MudItem xs="7" md="9">
+                                                            <MudTextField Class="d-inline-flex" Placeholder="Název" @bind-Value="mi.Name" For="() => mi.Name" />
                                                         </MudItem> 
-                                                        <MudItem xs="2">
-                                                            <MudTextField Class="d-inline-flex" Label="Cena" @bind-Value="mi.Price" For="() => mi.Price" />
-                                                        </MudItem>                                                        
+                                                        <MudItem xs="2" md="1">
+                                                            <MudTextField Class="d-inline-flex" Placeholder="Cena" @bind-Value="mi.Price" For="() => mi.Price" Adornment="Adornment.End" AdornmentText="Kč" />
+                                                        </MudItem> 
+                                                        <MudItem xs="1" md="1">
+                                                            <MudFab Icon="@Icons.Material.Close" Color="Color.Error" />
+                                                        </MudItem>
                                                     </MudGrid>
                                                 </ChildContent>
                                             </MudListItem>
