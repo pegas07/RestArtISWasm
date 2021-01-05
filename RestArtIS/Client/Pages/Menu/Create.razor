@@ -14,6 +14,12 @@
     {
         menuCategory = await http.GetFromJsonAsync<MenuCategory>($"api/menucategory/{menuCategoryId}");
         menu.MenuCategory = menuCategory;
+        if (menuCategory.MenuTypeId == (int)MenuTypes.Week)
+        {
+            var dates = await http.GetFromJsonAsync<(DateTime from, DateTime to)>($"api/menu/GetDateFromTo/{menuCategoryId}");
+            menu.DateFrom = dates.from;
+            menu.DateTo = dates.to;
+        }
     }
 
     async Task CreateMenu()

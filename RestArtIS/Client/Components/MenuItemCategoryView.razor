@@ -1,0 +1,42 @@
+<MudExpansionPanels MultiExpansion="true">
+    @foreach (var mic in MenuItemCategories)
+    {
+        <MudExpansionPanel IsExpanded="true">
+            <TitleContent><strong>@mic.Name</strong></TitleContent>
+            <ChildContent>
+                <MudList>
+                    @if (MenuItems != null)
+                    {
+                        foreach (var mi in MenuItems.Where(m => m.MenuItemCategoryId == mic.Id && m.Date == (Date ?? m.Date) ))
+                        {
+                            <MudListItem>
+                                <ChildContent>
+                                    <MenuItemLineView MenuItem="mi" MenuItemDeleted="@MenuItemDeleted" />
+                                </ChildContent>
+                            </MudListItem>
+                        }
+                    }
+                    <MudFab Color="Color.Success" Icon="@Icons.Material.Add" Size="Size.Small" OnClick="@(() => AddMenuItem.InvokeAsync(mic))" />
+                </MudList>
+            </ChildContent>
+        </MudExpansionPanel>
+    }
+</MudExpansionPanels>
+
+@code
+{
+    [Parameter]
+    public ICollection<MenuItemCategory> MenuItemCategories { get; set; }
+
+    [Parameter]
+    public ICollection<MenuItem> MenuItems { get; set; }
+
+    [Parameter]
+    public DateTime? Date { get; set; }
+
+    [Parameter]
+    public EventCallback<MenuItemCategory> AddMenuItem { get; set; }
+
+    [Parameter]
+    public EventCallback<MenuItem> MenuItemDeleted { get; set; }
+}

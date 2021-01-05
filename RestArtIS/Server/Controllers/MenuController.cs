@@ -70,8 +70,13 @@ namespace RestArtIS.Server.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Menu menu)
         {
-            //_context.Entry(menu).State = EntityState.Modified;
-            _context.Update(menu);
+            var existingMenu = _context.Menus.Include(i => i.MenuItems).FirstOrDefault(m => m.Id == menu.Id);
+            _context.Update(menu);            
+            foreach(var existingItem in existingMenu.MenuItems)
+            {
+                if (!menu.MenuItems.Any(m => m.Id == existingItem.Id))
+                    _context.Remove(existingItem);
+            }
             await _context.SaveChangesAsync();
             return NoContent();
         }
