@@ -58,11 +58,11 @@
         //navigation.NavigateTo("/menucategory");
     }
 
-    void AddMenuItem(MenuItemCategory menuItemCategory)
+    void AddMenuItem((MenuItemCategory, DateTime?) par)
     {
         if (menu.MenuItems == null)
             menu.MenuItems = new List<MenuItem>();
-        menu.MenuItems.Add(new MenuItem { Menu = menu, MenuItemCategory = menuItemCategory });
+        menu.MenuItems.Add(new MenuItem { Menu = menu, MenuItemCategory = par.Item1, Date = par.Item2 });
     }
 
     void DeleteMenuItem(MenuItem menuItem)

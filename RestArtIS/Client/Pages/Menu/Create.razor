@@ -16,10 +16,11 @@
         menu.MenuCategory = menuCategory;
         if (menuCategory.MenuTypeId == (int)MenuTypes.Week)
         {
-            var dates = await http.GetFromJsonAsync<(DateTime from, DateTime to)>($"api/menu/GetDateFromTo/{menuCategoryId}");
-            menu.DateFrom = dates.from;
-            menu.DateTo = dates.to;
-        }
+            var dates = await http.GetFromJsonAsync<Tuple<DateTime,DateTime>>($"api/menu/GetDateFromTo/{menuCategoryId}");
+            menu.DateFrom = dates.Item1;
+            menu.DateTo = dates.Item2;
+            menu.Name = $"Týdenní menu {menuCategory.Name} od {menu.DateFrom.Value.ToString("dd.MM.yyyy")} do {menu.DateTo.Value.ToString("dd.MM.yyyy")}"; //TODO: z konfigurace
+        }        
     }
 
     async Task CreateMenu()

@@ -54,7 +54,7 @@ namespace RestArtIS.Server.Controllers
                 from = now.AddDays((double)(8 - now.DayOfWeek));
                 to = now.AddDays((double)(14 - now.DayOfWeek));
             }
-            (DateTime from, DateTime to) dates = new(from, to);
+            Tuple<DateTime,DateTime> dates = new Tuple<DateTime, DateTime>(from, to);
             return Ok(dates);
         }
 

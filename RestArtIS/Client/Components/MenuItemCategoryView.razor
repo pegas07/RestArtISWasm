@@ -16,7 +16,7 @@
                             </MudListItem>
                         }
                     }
-                    <MudFab Color="Color.Success" Icon="@Icons.Material.Add" Size="Size.Small" OnClick="@(() => AddMenuItem.InvokeAsync(mic))" />
+                    <MudIconButton Color="Color.Success" Icon="@Icons.Material.Add" Size="Size.Small" OnClick="@(() => AddMenuItem.InvokeAsync((mic,Date)))" />
                 </MudList>
             </ChildContent>
         </MudExpansionPanel>
@@ -35,7 +35,7 @@
     public DateTime? Date { get; set; }
 
     [Parameter]
-    public EventCallback<MenuItemCategory> AddMenuItem { get; set; }
+    public EventCallback<(MenuItemCategory,DateTime?)> AddMenuItem { get; set; }
 
     [Parameter]
     public EventCallback<MenuItem> MenuItemDeleted { get; set; }
