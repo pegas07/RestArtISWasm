@@ -8,7 +8,7 @@
     <Authorized>*@
         <MudLayout>
             <MudAppBar Elevation="1">
-                <MudIconButton Icon="@Icons.Material.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                <MudIconButton Icon="@menuIcon" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                 <MudAppBarSpacer />
                 @*<LoginDisplay />*@
             </MudAppBar>
@@ -33,7 +33,8 @@
 
 
 @code {
-    bool _drawerOpen = true;
+    bool _drawerOpen  = true;
+    string menuIcon => (_drawerOpen ? Icons.Material.ArrowLeft : Icons.Material.Menu); 
 
     void DrawerToggle()
     {

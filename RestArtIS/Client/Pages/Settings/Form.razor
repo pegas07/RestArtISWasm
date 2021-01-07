@@ -19,32 +19,36 @@
 else
 {
     <EditForm Model="@settings" OnValidSubmit="Submit">
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-            <p>
-                <MatTextField Label="Název" FullWidth="true" @bind-Value="@settings.Name"></MatTextField>
-            </p>
-            <p>
-                <MatTextField Label="Email" FullWidth="true" @bind-Value="@settings.Email"></MatTextField>
-            </p>
-            <p>
-                <MatTextField Label="Tel" FullWidth="true" @bind-Value="@settings.Phone"></MatTextField>
-            </p>
-            <p>
-                <MatTextField Label="IČO" FullWidth="true" @bind-Value="@settings.ICO"></MatTextField>
-            </p>
-            <p>
-                <MatTextField Label="DIČ" FullWidth="true" @bind-Value="@settings.DIC"></MatTextField>
-            </p>
-            <fieldset>
-                <legend>Adresy</legend>
-                <p>
-                    <MatCheckbox Label="Dodací adresa stejná jako fakturační" @bind-Value="@settings.MailingAddressSameAsBillingAddress"/>
-                </p>
-            </fieldset>
-        </div>
-
-        <MatButton type="submit">Uložit</MatButton>
-        <MatButton type="button" OnClick="@Cancel">Storno</MatButton>
+        <DataAnnotationsValidator />
+        <MudCard Class="ma-2 pa-1">
+            <MudTextField Label="Název" @bind-Value="@settings.Name" For="@(() => settings.Name)" Required="true" RequiredError="Název je povinná položka" />
+            <MudTextField Label="Email" @bind-Value="@settings.Email" For="@(() => settings.Email)" Required="true" RequiredError="Email je povinná položka" />
+            <MudTextField Label="Tel" @bind-Value="@settings.Phone" For="@(() => settings.Phone)" Required="true" RequiredError="Telefon je povinná položka" />
+            <MudTextField Label="IČO" @bind-Value="@settings.ICO" For="@(() => settings.ICO)" Required="true" RequiredError="IČO je povinná položka" />
+            <MudTextField Label="DIČ" @bind-Value="@settings.DIC" For="@(() => settings.DIC)" Required="true" RequiredError="DIČ je povinná položka" />
+                
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Adresy</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudSwitch Label="Dodací adresa stejná jako fakturační" Color="Color.Primary" @bind-Checked="@settings.MailingAddressSameAsBillingAddress" />
+                    </CardHeaderActions>                   
+                </MudCardHeader>
+                <MudCardContent>
+                    <div>
+                        <MudCard Class="d-inline">asds</MudCard>
+                        <MudCard Class="d-inline"eeee></MudCard>
+                    </div>
+                    <MudText>This day everything happend.</MudText>
+                </MudCardContent>
+            </MudCard>                            
+        </MudCard>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit">Uložit</MudButton>
+            <MudButton OnClick="@Cancel">Storno</MudButton>
+        </MudCardActions>
     </EditForm>    
 }
 

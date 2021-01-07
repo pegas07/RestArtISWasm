@@ -1,32 +1,33 @@
 <EditForm Model="@vat" OnValidSubmit="@OnValidSubmit">
-    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-        <p>
-            <MatTextField Label="Název" FullWidth="true" @bind-Value="@vat.Name"></MatTextField>
-        </p>
-        <p>
-            <MatTextField Label="Aktuální sazba" ReadOnly="true" FullWidth="true" @bind-Value="@rate"></MatTextField>
-        </p>
-        <p>
-            <MatButton type="button" Label="Nová sazba" OnClick="@CreateNewRate" />
-        </p>
-        <p>
-            <MatTable Items="@vat.VatHistories" ShowPaging="false">
-                <MatTableHeader>
-                    <th>Datum od 12</th>
-                    <th>Datum do</th>
-                    <th>Sazba</th>
-                </MatTableHeader>
-                <MatTableRow Context="rowContext">
-                    <tr>@rowContext.ValidFrom</tr>
-                    <tr>@rowContext.ValidTo</tr>
-                    <tr>@rowContext.Rate</tr>
-                </MatTableRow>
-            </MatTable>
-        </p>
-    </div>
+    <DataAnnotationsValidator />
+    <MudCard Class="ma-2 pa-1">
+        <MudTextField Label="Název" @bind-Value="@vat.Name" For="@(() => vat.Name)" Required="true" RequiredError="Název je povinná položka" />
+        <MudTextField Label="Aktuální sazba" @bind-Value="@rate" For="@(() => rate)" ReadOnly="true" />
 
-    <MatButton type="submit" class="btn btn-primary">@ButtonText</MatButton>
-    <MatButton type="button" OnClick="@Cancel">Storno</MatButton>
+        <MudButton OnClick="@CreateNewRate" >Nová sazba</MudButton>
+        <MudTable Items="vat.VatHistories">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Historie sazeb</MudText>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Datum od</MudTh>
+                <MudTh>Datum do</MudTh>
+                <MudTh>Sazba</MudTh>
+            </HeaderContent>
+            <RowTemplate Context="rowContext">
+                <MudTd DataLabel="Datum od">@rowContext.ValidFrom</MudTd>
+                <MudTd DataLabel="Datum do">@rowContext.ValidTo</MudTd>
+                <MudTd DataLabel="Sazba">@rowContext.Rate</MudTd>
+            </RowTemplate>
+        </MudTable>
+
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit">@ButtonText</MudButton>
+            <MudButton OnClick="Cancel">Storno</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+    
 
     <MatDialog @bind-IsOpen="@IsNewRateDialog">
         <MatDialogTitle>@($"Nová hodota sazby DPH {vat.Name}")</MatDialogTitle>

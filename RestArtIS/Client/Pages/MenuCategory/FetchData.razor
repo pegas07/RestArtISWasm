@@ -2,7 +2,7 @@
 @inject HttpClient client
 @inject IJSRuntime js
 @inject NavigationManager uriHelper
-<h3>Kategorie menu</h3>
+<MudText Typo="Typo.h3">Kategorie menu</MudText>
 <div class="form-group">
     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewMenuCategory">Nová</MudButton>
 </div>
@@ -10,11 +10,11 @@
 
 @if (menuCategories == null)
 {
-    <text>Loading...</text>
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
 }
 else if (menuCategories.Length == 0)
 {
-    <text>No Records Found.</text>
+    <MudText>Nenalezeny žádné záznamy</MudText>
 }
 else
 {

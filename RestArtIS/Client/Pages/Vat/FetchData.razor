@@ -2,9 +2,11 @@
 @inject HttpClient client
 @inject IJSRuntime js
 @inject NavigationManager uriHelper
-<h3>DPH</h3>
+
+<MudText Typo="Typo.h3">DPH</MudText>
+
 <div class="form-group">
-    <a class="btn btn-success" href="vat/create"><i class="oi oi-plus"></i> Nová</a>
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewVat">Nová</MudButton>
 </div>
 <br>
 
@@ -14,30 +16,25 @@
 }
 else if (vats.Length == 0)
 {
-    <text>No Records Found.</text>
+    <MudText>Nenalezeny žádné záznamy</MudText>
 }
 else
 {
-    @*<MudTable Items="@vats" >
-
-    </MudTable>*@
-    <MatTable Items="@vats" LoadInitialData="true">
-        <MatTableHeader>
-            <th>Id</th>
-            <th>Název</th>
-            <th>Sazba</th>
-            <th></th>
-        </MatTableHeader>
-        <MatTableRow>
-            <td>@context.Id</td>
-            <td>@context.Name</td>
-            <td>@context.ActualRate</td>
-            <td>
-                <MatIconButton Icon="edit" OnClick="@(() => Edit(context.Id))" />
-                <MatIconButton Icon="delete" OnClick="@(() => Delete(context.Id))" />
-            </td>
-        </MatTableRow>
-    </MatTable>
+    <MudTable Items="@vats" Hover="true">
+        <HeaderContent>
+            <MudTh>Název</MudTh>
+            <MudTh>Sazba DPH</MudTh>
+            <MudTh />
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Name</MudTd>  
+            <MudTd>@context.ActualRate</MudTd>          
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Edit" OnClick="@(() => Edit(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Delete" OnClick="@(() => Delete(context.Id))" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 }
 @code {
     Vat[] vats { get; set; }
@@ -57,5 +54,10 @@ else
     void Edit(int vatId)
     {
         uriHelper.NavigateTo($"vat/edit/{vatId}");
+    }
+
+    void NewVat()
+    {
+        uriHelper.NavigateTo($"vat/create");
     }
 }
