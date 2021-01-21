@@ -38,7 +38,7 @@
 
         <MudCardActions>
             <MudButton ButtonType="ButtonType.Submit">@ButtonText</MudButton>
-            <MudButton OnClick="Cancel">Storno</MudButton>
+            <MudButton OnClick="@(() => OnValidCancel.InvokeAsync())">Storno</MudButton>
         </MudCardActions>
     </MudCard>
 
@@ -57,12 +57,7 @@
     {
         var mt = await client.GetFromJsonAsync<MenuType[]>("api/menutype");
         menuTypes = mt.ToList();
-    }
-    void Cancel()
-    {
-        OnValidCancel.InvokeAsync();
-        //navigation.NavigateTo("/menucategory");
-    }
+    }  
 
     void NewMenuItemCategory()
     {

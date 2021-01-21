@@ -56,6 +56,9 @@ namespace RestArtIS.Server.Data
         public DbSet<Allergen> Allergens { get; set; }
         public DbSet<MenuItemTemplate> MenuItemTemplates { get; set; }
         public DbSet<MenuItemCategory> MenuItemCategories { get; set; }
+        public DbSet<Order> Orders { get; set; } 
+        public DbSet<OrderItem> OrderItems { get; set; } 
+        public DbSet<DeliveryRoute> DeliveryRoutes { get; set; } 
     }
 }
 

@@ -1,0 +1,15 @@
+﻿@page "/deliveryroute/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+
+<MudText Class="mb-5" Typo="Typo.h3">Nová trasa rozvozu</MudText>
+<Form ButtonText="Vytvořit trasu rozvozu" dr="@dr"
+      OnValidSubmit="@CreateDeliveryRoute" />
+@code {
+    DeliveryRoute dr = new DeliveryRoute();
+    async Task CreateDeliveryRoute()
+    {
+        await http.PostAsJsonAsync("api/deliveryroute", dr);
+        uriHelper.NavigateTo("deliveryroute");
+    }
+}

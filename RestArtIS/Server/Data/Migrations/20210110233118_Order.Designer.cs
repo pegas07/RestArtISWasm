@@ -3,21 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestArtIS.Server.Data;
 
 namespace RestArtIS.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210110233118_Order")]
+    partial class Order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
                 {
@@ -529,26 +531,6 @@ namespace RestArtIS.Server.Data.Migrations
                     b.ToTable("BusinessPartners");
                 });
 
-            modelBuilder.Entity("RestArtIS.Shared.Models.DeliveryRoute", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeliveryRoutes");
-                });
-
             modelBuilder.Entity("RestArtIS.Shared.Models.Menu", b =>
                 {
                     b.Property<int>("Id")
@@ -727,57 +709,6 @@ namespace RestArtIS.Server.Data.Migrations
                             Id = 3,
                             Name = "Stálé"
                         });
-                });
-
-            modelBuilder.Entity("RestArtIS.Shared.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("BusinessPartnerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessPartnerId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("RestArtIS.Shared.Models.OrderItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ItemDescription")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(8,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("RestArtIS.Shared.Models.Settings", b =>
@@ -987,24 +918,6 @@ namespace RestArtIS.Server.Data.Migrations
                     b.Navigation("MenuCategory");
                 });
 
-            modelBuilder.Entity("RestArtIS.Shared.Models.Order", b =>
-                {
-                    b.HasOne("RestArtIS.Shared.Models.BusinessPartner", "BusinessPartner")
-                        .WithMany()
-                        .HasForeignKey("BusinessPartnerId");
-
-                    b.Navigation("BusinessPartner");
-                });
-
-            modelBuilder.Entity("RestArtIS.Shared.Models.OrderItem", b =>
-                {
-                    b.HasOne("RestArtIS.Shared.Models.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("RestArtIS.Shared.Models.Settings", b =>
                 {
                     b.HasOne("RestArtIS.Shared.Models.Address", "BillingAddress")
@@ -1039,11 +952,6 @@ namespace RestArtIS.Server.Data.Migrations
             modelBuilder.Entity("RestArtIS.Shared.Models.MenuCategory", b =>
                 {
                     b.Navigation("MenuItemCategories");
-                });
-
-            modelBuilder.Entity("RestArtIS.Shared.Models.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("RestArtIS.Shared.Models.Vat", b =>

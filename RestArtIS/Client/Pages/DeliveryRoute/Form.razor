@@ -1,0 +1,17 @@
+﻿<EditForm Model="@dr" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudCard Class="ma-2 pa-1">
+        <MudTextField Label="Zkratka" @bind-Value="@dr.Code" For="@(() => dr.Code)" Required="true" RequiredError="Zkratka je povinná položka" />
+        <MudTextField Label="Název" @bind-Value="@dr.Name" For="@(() => dr.Name)" Required="true" RequiredError="Název je povinná položka" />
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit">@ButtonText</MudButton>
+            <MudButton OnClick="@(() => OnValidCancel.InvokeAsync())">Storno</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+@code {
+    [Parameter] public DeliveryRoute dr { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Uložit";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public EventCallback OnValidCancel { get; set; }
+}

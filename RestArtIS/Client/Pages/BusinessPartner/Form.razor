@@ -1,70 +1,21 @@
 ﻿<EditForm Model="@bp" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
-    <div class="form-group ">
-        <div>
-            <MatTextField Label="Zkratka" FullWidth="true" @bind-Value="@bp.Code"></MatTextField>            
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Název :</label>
-        <div>
-            <InputText @bind-Value="@bp.Name" />
-            <ValidationMessage For="@(() => bp.Name)" />
-        </div>
-    </div>
-
-    <div class="form-group ">
-        <div>
-            <label>IČ :</label>
-            <div>
-                <InputText @bind-Value="@bp.ICO" />
-                <ValidationMessage For="@(() => bp.ICO)" />
-            </div>
-        </div>
-    </div>
-    <div class="form-group ">
-        <div>
-            <label>DIČ :</label>
-            <div>
-                <InputText @bind-Value="@bp.DIC" />
-                <ValidationMessage For="@(() => bp.DIC)" />
-            </div>
-        </div>
-    </div>
-    <div class="form-group ">
-        <div>
-            <label>Tel :</label>
-            <div>
-                <InputText @bind-Value="@bp.Phone" />
-                <ValidationMessage For="@(() => bp.Phone)" />
-            </div>
-        </div>
-    </div>
-    <div class="form-group ">
-        <div>
-            <label>Email :</label>
-            <div>
-                <InputText @bind-Value="@bp.Email" />
-                <ValidationMessage For="@(() => bp.Email)" />
-            </div>
-        </div>
-    </div>
-    @*<div class="form-group ">
-        <div>
-            <label>Pořadí :</label>
-            <div>
-                <InputText @bind-Value="@bp.Order.ToString()" />
-                <ValidationMessage For="@(() => bp.Order)" />
-            </div>
-        </div>
-    </div>*@
-
-    <button type="submit" class="btn btn-success">
-        @ButtonText
-    </button>
+    <MudCard Class="ma-2 pa-1">
+        <MudTextField Label="Zkratka" @bind-Value="@bp.Code" For="@(() => bp.Code)" Required="true" RequiredError="Zkratka je povinná položka" />
+        <MudTextField Label="Název" @bind-Value="@bp.Name" For="@(() => bp.Name)" Required="true" RequiredError="Název je povinná položka" />
+        <MudTextField Label="IČ" @bind-Value="@bp.ICO" For="@(() => bp.ICO)" Required="true" RequiredError="IČ je povinná položka" />
+        <MudTextField Label="DIČ" @bind-Value="@bp.DIC" For="@(() => bp.DIC)" Required="true" RequiredError="DIČ je povinná položka" />
+        <MudTextField Label="Tel" @bind-Value="@bp.Phone" For="@(() => bp.Phone)" Required="true" RequiredError="Telefon je povinná položka" />
+        <MudTextField Label="Email" @bind-Value="@bp.Email" For="@(() => bp.Email)" Required="true" RequiredError="Email je povinná položka" />
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit">@ButtonText</MudButton>
+            <MudButton OnClick="@(() => OnValidCancel.InvokeAsync())">Storno</MudButton>
+        </MudCardActions>
+    </MudCard>    
 </EditForm>
 @code {
     [Parameter] public BusinessPartner bp { get; set; }
     [Parameter] public string ButtonText { get; set; } = "Uložit";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public EventCallback OnValidCancel { get; set; }
 }

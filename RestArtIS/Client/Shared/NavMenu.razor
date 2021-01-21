@@ -5,6 +5,11 @@
         <MudNavLink Href="/menucategory" Icon="@Icons.Material.Bento">Kategorie menu</MudNavLink>
         <MudNavLink Href="/menuitemcategory" Icon="@Icons.Material.Dns">Kategorie položky menu</MudNavLink>
     </MudNavGroup>
+    <MudNavGroup Title="Objednávky" Icon="@Icons.Material.Folder">
+        <MudNavLink Href="/order" Icon="@Icons.Material.FoodBank">Jídelní lístky</MudNavLink>
+        <MudNavLink Href="/businesspartner" Icon="@Icons.Material.FolderShared">Odběratelé</MudNavLink>
+        <MudNavLink Href="/deliveryroute" Icon="@Icons.Material.ZoomOutMap">Trasy Rozvozu</MudNavLink>
+    </MudNavGroup>
     <MudNavGroup Title="Nastavení" Icon="@Icons.Material.Settings" Expanded="true" >
         <MudNavLink Href="/settings" Icon="@Icons.Material.Settings">Nastavení</MudNavLink>
         <MudNavLink Href="/address" Icon="@Icons.Material.Settings">Adresy</MudNavLink>
@@ -13,23 +18,4 @@
     <MudNavLink></MudNavLink>
 </MudNavMenu>
 
-@*<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
-</div>*@
 

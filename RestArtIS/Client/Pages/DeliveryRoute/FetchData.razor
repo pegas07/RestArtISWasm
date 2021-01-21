@@ -1,0 +1,62 @@
+﻿@page "/deliveryroute"
+@inject HttpClient client
+@inject IJSRuntime js
+@inject NavigationManager uriHelper
+<MudText Class="mb-5" Typo="Typo.h3">Trasy rozvozu</MudText>
+<div class="form-group">
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewDeliveryRoute">Nová</MudButton>
+</div>
+<br>
+
+@if (deliveryRoutes == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else if (deliveryRoutes.Length == 0)
+{
+    <MudText>Nenalezeny žádné záznamy</MudText>
+}
+else
+{
+    <MudTable Items="@deliveryRoutes" Hover="true">
+        <HeaderContent>
+            <MudTh>Zkratka</MudTh>
+            <MudTh>Název</MudTh>
+            <MudTh />
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Code</MudTd>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Edit" OnClick="@(() => Edit(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Delete" OnClick="@(() => Delete(context.Id))" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+@code {
+    DeliveryRoute[] deliveryRoutes { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        deliveryRoutes = await client.GetFromJsonAsync<DeliveryRoute[]>("api/deliveryroute");
+    }
+    async Task Delete(int deliveryRouteId)
+    {
+        var dr = deliveryRoutes.First(x => x.Id == deliveryRouteId);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {dr.Name}'s ({dr.Id}) Record?"))
+        {
+            await client.DeleteAsync($"api/deliveryroute/{deliveryRouteId}");
+            await OnInitializedAsync();
+        }
+    }
+
+    void NewDeliveryRoute()
+    {
+        uriHelper.NavigateTo($"deliveryroute/create");
+    }
+
+    void Edit(int deliveryRouteId)
+    {
+        uriHelper.NavigateTo($"deliveryroute/edit/{deliveryRouteId}");
+    }
+}

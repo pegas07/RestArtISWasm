@@ -17,7 +17,7 @@ namespace RestArtIS.Shared.Models
         [StringLength(100)]
         public string Amount { get; set; }
 
-        [Column(TypeName = "decimal(4, 2)")]
+        [Column(TypeName = "decimal(8, 2)")]
         public decimal Price { get; set; }
 
         [ForeignKey("Menu")]

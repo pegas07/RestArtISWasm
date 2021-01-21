@@ -2,10 +2,9 @@
 @inject HttpClient client
 @inject IJSRuntime js
 @inject NavigationManager uriHelper
-<h3>Jídelní lístky</h3>
-@*<div class="form-group">
-    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewButtonClick">Nový jídelní lístek</MudButton>
-</div>*@
+
+<MudText Class="mb-5" Typo="Typo.h3">Jídelní lístky</MudText>
+
 <div class="form-group">
     @foreach (var cat in menuCategories)
     {
@@ -18,7 +17,7 @@
 }
 else if (menus.Length == 0)
 {
-    <text>No Records Found.</text>
+    <text>Nenalezeny žádné záznamy</text>
 }
 else
 {

@@ -17,7 +17,7 @@
             <RowTemplate Context="rowContext">
                 <MudTd DataLabel="Datum od">@rowContext.ValidFrom</MudTd>
                 <MudTd DataLabel="Datum do">@rowContext.ValidTo</MudTd>
-                <MudTd DataLabel="Sazba">@rowContext.Rate</MudTd>
+                <MudTd DataLabel="Sazba">@($"{rowContext.Rate} %")</MudTd>
             </RowTemplate>
         </MudTable>
 

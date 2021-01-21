@@ -1,7 +1,8 @@
 ﻿@page "/businesspartner/create"
 @inject HttpClient http
 @inject NavigationManager uriHelper
-<h3>Nový obchodní partner</h3>
+
+<MudText Class="mb-5" Typo="Typo.h3">Nový obchodní partner</MudText>
 <Form ButtonText="Vytvořit partnera" bp="@bp"
       OnValidSubmit="@CreateBusinessPartner" />
 @code {

@@ -1,48 +1,40 @@
 ﻿@page "/businesspartner"
 @inject HttpClient client
 @inject IJSRuntime js
-<h3>Obchodní partneři</h3>
+@inject NavigationManager uriHelper
+<MudText Class="mb-5" Typo="Typo.h3">Obchodní partneři</MudText>
 <div class="form-group">
-    <a class="btn btn-success" href="businesspartner/create"><i class="oi oi-plus"></i> Nový</a>
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewBusinessPartner">Nový</MudButton>
 </div>
 <br>
+
 @if (businessPartners == null)
 {
     <MudProgressCircular Color="Color.Default" Indeterminate="true" />
 }
 else if (businessPartners.Length == 0)
 {
-    <text>No Records Found.</text>
+    <MudText>Nenalezeny žádné záznamy</MudText>
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Zkratka</th>
-                <th>Název</th>
-                <th>Pořadí</th>
-
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (BusinessPartner bp in businessPartners)
-            {
-                <tr>
-                    <td>@bp.Id</td>
-                    <td>@bp.Code</td>
-                    <td>@bp.Name</td>
-                    <td>@bp.Order</td>
-                    <td>
-                        <a class="btn btn-success" href="businesspartner/edit/@bp.Id">Edit</a>
-                        <button class="btn btn-danger" @onclick="@(() => Delete(bp.Id))">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <MudTable Items="@businessPartners" Hover="true">
+        <HeaderContent>
+            <MudTh>Zkratka</MudTh>
+            <MudTh>Název</MudTh>
+            <MudTh>Pořadí</MudTh>
+            <MudTh />
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Code</MudTd>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.Order</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Edit" OnClick="@(() => Edit(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Delete" OnClick="@(() => Delete(context.Id))" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 }
 @code {
     BusinessPartner[] businessPartners { get; set; }
@@ -58,5 +50,15 @@ else
             await client.DeleteAsync($"api/businesspartner/{businessPartnerId}");
             await OnInitializedAsync();
         }
+    }
+
+    void NewBusinessPartner()
+    {
+        uriHelper.NavigateTo($"businesspartner/create");
+    }
+
+    void Edit(int businessPartnerId)
+    {
+        uriHelper.NavigateTo($"businesspartner/edit/{businessPartnerId}");
     }
 }

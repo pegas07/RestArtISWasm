@@ -69,14 +69,29 @@ namespace RestArtIS.Server.Controllers
 
         [HttpPut]
         public async Task<IActionResult> Put(Menu menu)
-        {
+        {           
             var existingMenu = _context.Menus.Include(i => i.MenuItems).FirstOrDefault(m => m.Id == menu.Id);
-            _context.Update(menu);            
-            foreach(var existingItem in existingMenu.MenuItems)
+            _context.Entry(existingMenu).CurrentValues.SetValues(menu);
+            foreach (var item in menu.MenuItems)
+            {
+                var existingItem = existingMenu.MenuItems.AsQueryable().FirstOrDefault(i => i.Id == item.Id);
+                if (existingItem == null)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.Name) && !string.IsNullOrWhiteSpace(item.Name))
+                        existingMenu.MenuItems.Add(item);
+                }
+                else
+                {
+                    _context.Entry(existingItem).CurrentValues.SetValues(item);
+                }                
+            }
+
+            foreach (var existingItem in existingMenu.MenuItems)
             {
                 if (!menu.MenuItems.Any(m => m.Id == existingItem.Id))
                     _context.Remove(existingItem);
             }
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
