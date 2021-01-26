@@ -1,7 +1,9 @@
-﻿<EditForm Model="@order" OnValidSubmit="@OnValidSubmit">
+﻿@inject HttpClient client
+
+<EditForm Model="@order" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <MudCard Class="ma-2 pa-1">
-        
+        <MudAutocomplete T="BusinessPartner" @bind-Value="order.BusinessPartner" SearchFunc  />
         <MudTextField Label="Poznámka" @bind-Value="@order.Note" For="@(() => order.Note)" />
         <MudCardActions>
             <MudButton ButtonType="ButtonType.Submit">@ButtonText</MudButton>
@@ -14,4 +16,11 @@
     [Parameter] public string ButtonText { get; set; } = "Uložit";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public EventCallback OnValidCancel { get; set; }
+
+    private async Task<IEnumerable<BusinessPartner>> GetBusinessPartnersAsync(string search)
+    {
+        return client.GetFromJsonAsync<IEnumerable<BusinessPartner>>("api/businesspartner");
+
+        //return client.GetFromJsonAsync<IEnumerable<MenuType>>("api/businesspartner");
+    }
 }
