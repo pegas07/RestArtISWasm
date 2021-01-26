@@ -4,12 +4,19 @@
 
 <MudText Class="mb-5" Typo="Typo.h3">Nový obchodní partner</MudText>
 <Form ButtonText="Vytvořit partnera" bp="@bp"
-      OnValidSubmit="@CreateBusinessPartner" />
+      OnValidSubmit="@CreateBusinessPartner" 
+      OnValidCancel="@Cancel"
+      />
 @code {
     BusinessPartner bp = new BusinessPartner();
     async Task CreateBusinessPartner()
     {
         await http.PostAsJsonAsync("api/businesspartner", bp);
+        uriHelper.NavigateTo("businesspartner");
+    }
+
+    void Cancel()
+    {
         uriHelper.NavigateTo("businesspartner");
     }
 }

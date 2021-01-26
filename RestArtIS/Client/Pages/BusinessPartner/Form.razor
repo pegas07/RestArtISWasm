@@ -1,4 +1,6 @@
-﻿<EditForm Model="@bp" OnValidSubmit="@OnValidSubmit">
+﻿@inject HttpClient client
+
+<EditForm Model="@bp" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <MudCard Class="ma-2 pa-1">
         <MudTextField Label="Zkratka" @bind-Value="@bp.Code" For="@(() => bp.Code)" Required="true" RequiredError="Zkratka je povinná položka" />
@@ -7,15 +9,32 @@
         <MudTextField Label="DIČ" @bind-Value="@bp.DIC" For="@(() => bp.DIC)" Required="true" RequiredError="DIČ je povinná položka" />
         <MudTextField Label="Tel" @bind-Value="@bp.Phone" For="@(() => bp.Phone)" Required="true" RequiredError="Telefon je povinná položka" />
         <MudTextField Label="Email" @bind-Value="@bp.Email" For="@(() => bp.Email)" Required="true" RequiredError="Email je povinná položka" />
+
+        <MudSelect Label="Trasa rozvozu" @bind-Value="@bp.DeliveryRoute" T="DeliveryRoute" Text="@bp?.DeliveryRoute?.Name" OffsetY="true"
+                   Required="true" RequiredError="Typ menu je povinná položka" ToStringFunc="@converter" For="@(() => bp.DeliveryRoute)">
+            @foreach (DeliveryRoute dr in deliveryRoutes)
+            {
+                <MudSelectItem T="DeliveryRoute" Value="@dr">@dr.Name</MudSelectItem>
+            }
+        </MudSelect>
         <MudCardActions>
             <MudButton ButtonType="ButtonType.Submit">@ButtonText</MudButton>
             <MudButton OnClick="@(() => OnValidCancel.InvokeAsync())">Storno</MudButton>
         </MudCardActions>
-    </MudCard>    
+    </MudCard>
 </EditForm>
 @code {
     [Parameter] public BusinessPartner bp { get; set; }
     [Parameter] public string ButtonText { get; set; } = "Uložit";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public EventCallback OnValidCancel { get; set; }
+    [Parameter] public List<DeliveryRoute> deliveryRoutes { get; set; } = new List<DeliveryRoute>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var dr = await client.GetFromJsonAsync<DeliveryRoute[]>("api/deliveryroute");
+        deliveryRoutes = dr.ToList();
+    }
+
+    Func<DeliveryRoute, string> converter = m => m.Name;
 }

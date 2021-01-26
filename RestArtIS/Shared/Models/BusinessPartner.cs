@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace RestArtIS.Shared.Models
@@ -23,6 +24,19 @@ namespace RestArtIS.Shared.Models
         [StringLength(30)]
         public string BankAccount { get; set; }
         public bool IsActive { get; set; }
+
+        [ForeignKey("DeliveryRoute")]
+        public int? DeliveryRouteId { get; set; }
+        private DeliveryRoute deliveryRoute;
+        public DeliveryRoute DeliveryRoute
+        {
+            get => deliveryRoute;
+            set
+            {
+                deliveryRoute = value;
+                DeliveryRouteId = value?.Id;
+            }
+        }
 
         public Address BillingAddress { get; set; }
         public Address MailingAddress { get; set; }

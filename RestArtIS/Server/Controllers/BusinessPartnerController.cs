@@ -23,19 +23,20 @@ namespace RestArtIS.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var bps = await _context.BusinessPartners.ToListAsync();
+            var bps = await _context.BusinessPartners.Include(rd => rd.DeliveryRoute).ToListAsync();
             return Ok(bps);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var bp = await _context.BusinessPartners.FirstOrDefaultAsync(a => a.Id == id);
+            var bp = await _context.BusinessPartners.Include(rd => rd.DeliveryRoute).FirstOrDefaultAsync(a => a.Id == id);
             return Ok(bp);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(BusinessPartner businessPartner)
         {
+            businessPartner.DeliveryRoute = _context.DeliveryRoutes.FirstOrDefault(dr => dr.Id == businessPartner.DeliveryRouteId);
             _context.Add(businessPartner);
             await _context.SaveChangesAsync();
             return Ok(businessPartner.Id);
