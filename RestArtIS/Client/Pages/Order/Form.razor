@@ -34,7 +34,8 @@
                         else
                         {
                             <MudGrid>
-                                <MudItem xs="2" md="1">
+                                @*<MudItem xs="2" md="1">
+                                    <MudText Class="d-inline-flex" 
                                     <MudTextField Class="d-inline-flex" Placeholder="Množství" @bind-Value="MenuItem.Amount" For="() => MenuItem.Amount" />
                                 </MudItem> 
                                 <MudItem xs="7" md="9">
@@ -45,7 +46,7 @@
                                 </MudItem> 
                                 <MudItem xs="1" md="1">
                                     <MudIconButton Icon="@Icons.Material.Close" Size="Size.Small" Color="Color.Error" OnClick="@(() => MenuItemDeleted.InvokeAsync(MenuItem))" />
-                                </MudItem>
+                                </MudItem>*@
                             </MudGrid>
                         }
 
