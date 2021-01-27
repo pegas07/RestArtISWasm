@@ -33,6 +33,14 @@ namespace RestArtIS.Server.Controllers
             return Ok(bp);
         }
 
+        [Route("[action]/{text}")]
+        [HttpGet("{text}")]
+        public async Task<IActionResult> Search(string text)
+        {
+            var bps = await _context.BusinessPartners.Include(rd => rd.DeliveryRoute).Where(bp => (bp.Name != null && bp.Name.Contains(text)) || (bp.Code != null && bp.Code.Contains(text))).ToListAsync();
+            return Ok(bps);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(BusinessPartner businessPartner)
         {

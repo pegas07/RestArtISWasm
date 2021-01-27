@@ -1,0 +1,31 @@
+@page "/order/edit/{orderId:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+<h3>Změnit</h3>
+<Form ButtonText="Změnit objednávku" order="order" deliveryRoutes="@deliveryRoutes"
+      OnValidSubmit="@EditOrder"
+      OnValidCancel="@Cancel"
+      />
+@code {
+    [Parameter] public int orderId { get; set; }
+    Order order = new Order();
+    private List<DeliveryRoute> deliveryRoutes { get; set; } = new List<DeliveryRoute>();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        order = await http.GetFromJsonAsync<Order>($"api/order/{orderId}");
+        var dr = await http.GetFromJsonAsync<DeliveryRoute[]>("api/deliveryroute");
+        deliveryRoutes = dr.ToList();
+    }
+    async Task EditOrder()
+    {
+        await http.PutAsJsonAsync("api/order", order);
+        uriHelper.NavigateTo("order");
+    }
+
+    void Cancel()
+    {
+        uriHelper.NavigateTo("order");
+    }
+}

@@ -11,7 +11,7 @@
         <MudTextField Label="Email" @bind-Value="@bp.Email" For="@(() => bp.Email)" Required="true" RequiredError="Email je povinná položka" />
 
         <MudSelect Label="Trasa rozvozu" @bind-Value="@bp.DeliveryRoute" T="DeliveryRoute" Text="@bp?.DeliveryRoute?.Name" OffsetY="true"
-                   Required="true" RequiredError="Typ menu je povinná položka" ToStringFunc="@converter" For="@(() => bp.DeliveryRoute)">
+                   Required="true" RequiredError="Trasa rozvozu je povinná položka" ToStringFunc="@converter" For="@(() => bp.DeliveryRoute)">
             @foreach (DeliveryRoute dr in deliveryRoutes)
             {
                 <MudSelectItem T="DeliveryRoute" Value="@dr">@dr.Name</MudSelectItem>

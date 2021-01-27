@@ -10,19 +10,27 @@ namespace RestArtIS.Shared.Models
 {
     public class Order : BaseEntity
     {
-
-
         public DateTime DateCreated { get; set; }
 
         [ForeignKey("BusinessPartner")]
         public int? BusinessPartnerId { get; set; }
-        public BusinessPartner BusinessPartner { get; set; }
+        private BusinessPartner businessPartner;
+        public BusinessPartner BusinessPartner 
+        { 
+            get => businessPartner; 
+            set 
+            {
+                businessPartner = value; 
+                BusinessPartnerId = value?.Id;
+            }
+        }
 
         [ForeignKey("DeliveryRoute")]
         public int? DeliveryRouteId { get; set; }
-        private DeliveryRoute deliveryRoute;
-        public DeliveryRoute DeliveryRoute 
-        { 
+        private DeliveryRoute deliveryRoute;        
+
+        public DeliveryRoute DeliveryRoute
+        {
             get => deliveryRoute;
             set
             {
@@ -35,5 +43,10 @@ namespace RestArtIS.Shared.Models
         public string Note { get; set; }
 
         public ICollection<OrderItem> OrderItems { get; set; }
+
+        public Order()
+        {
+            DateCreated = DateTime.Now;
+        }
     }
 }

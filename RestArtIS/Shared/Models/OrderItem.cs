@@ -31,5 +31,18 @@ namespace RestArtIS.Shared.Models
 
         [Column(TypeName = "decimal(8, 2)")]
         public decimal Price { get; set; }
+
+        [ForeignKey("MenuItem")]
+        public int? MenuItemId { get; set; }
+        private MenuItem menuItem;        
+        public MenuItem MenuItem
+        {
+            get => menuItem;
+            set
+            {
+                menuItem = value;
+                MenuItemId = value?.Id;
+            }
+        }
     }
 }
