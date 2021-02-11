@@ -6,7 +6,7 @@
 <MudText Typo="Typo.h3">Kategorie položky menu</MudText>
 
 <div class="form-group">
-    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewButtonClick">Nová</MudButton>
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" OnClick="NewButtonClick">Nová</MudButton>
 </div>
 <br>
 
@@ -28,8 +28,8 @@ else
         <RowTemplate>
             <MudTd>@context.Name</MudTd>            
             <MudTd>
-                <MudIconButton Icon="@Icons.Material.Edit" OnClick="@(() => Edit(context.Id))" />
-                <MudIconButton Icon="@Icons.Material.Delete" OnClick="@(() => Delete(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Edit(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(() => Delete(context.Id))" />
             </MudTd>
         </RowTemplate>
     </MudTable>

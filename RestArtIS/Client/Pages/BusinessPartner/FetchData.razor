@@ -4,7 +4,7 @@
 @inject NavigationManager uriHelper
 <MudText Class="mb-5" Typo="Typo.h3">Obchodní partneři</MudText>
 <div class="form-group">
-    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Add" OnClick="NewBusinessPartner">Nový</MudButton>
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" OnClick="NewBusinessPartner">Nový</MudButton>
 </div>
 <br>
 
@@ -32,8 +32,8 @@ else
             <MudTd>@context.DeliveryRoute?.Name</MudTd>
             <MudTd>@context.Order</MudTd>
             <MudTd>
-                <MudIconButton Icon="@Icons.Material.Edit" OnClick="@(() => Edit(context.Id))" />
-                <MudIconButton Icon="@Icons.Material.Delete" OnClick="@(() => Delete(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Edit(context.Id))" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(() => Delete(context.Id))" />
             </MudTd>
         </RowTemplate>
     </MudTable>

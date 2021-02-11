@@ -51,5 +51,10 @@ namespace RestArtIS.Shared.Models
         }
 
         public DateTime? Date { get; set; }
+
+        [StringLength(500)]
+        public string Note { get; set; }
+
+        public bool IsOnlyNote { get; set; }
     }
 }

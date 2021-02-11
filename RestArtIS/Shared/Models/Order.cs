@@ -22,6 +22,8 @@ namespace RestArtIS.Shared.Models
             {
                 businessPartner = value; 
                 BusinessPartnerId = value?.Id;
+                if (BusinessPartner != null && BusinessPartner.DeliveryRoute != null)
+                    DeliveryRoute = BusinessPartner.DeliveryRoute;
             }
         }
 

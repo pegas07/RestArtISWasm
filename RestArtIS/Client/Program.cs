@@ -38,7 +38,7 @@ namespace RestArtIS.Client
 
 
 
-
+            builder.Services.AddMudServices();
             builder.Services.AddMudBlazorDialog();
             builder.Services.AddMudBlazorSnackbar();
             

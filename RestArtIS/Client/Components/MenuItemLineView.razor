@@ -9,7 +9,7 @@
         <MudTextField Class="d-inline-flex" Placeholder="Cena" @bind-Value="MenuItem.Price" For="() => MenuItem.Price" Adornment="Adornment.End" AdornmentText="Kč" />
     </MudItem> 
     <MudItem xs="1" md="1">
-        <MudIconButton Icon="@Icons.Material.Close" Size="Size.Small" Color="Color.Error" OnClick="@(() => MenuItemDeleted.InvokeAsync(MenuItem))" />
+        <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" OnClick="@(() => MenuItemDeleted.InvokeAsync(MenuItem))" />
     </MudItem>
 </MudGrid>
 

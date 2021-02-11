@@ -7,16 +7,28 @@
                 <MudList>
                     @if (MenuItems != null)
                     {
-                        foreach (var mi in MenuItems.Where(m => m.MenuItemCategoryId == mic.Id && m.Date == (Date ?? m.Date) ))
+                        var actMenuItems = MenuItems.Where(m => m.MenuItemCategoryId == mic.Id && m.Date == (Date ?? m.Date));
+                        if (actMenuItems.Any(i => i.IsOnlyNote))
                         {
-                            <MudListItem>
-                                <ChildContent>
-                                    <MenuItemLineView MenuItem="mi" MenuItemDeleted="@MenuItemDeleted" />
-                                </ChildContent>
-                            </MudListItem>
+                            <MudText>Den bez polozek</MudText>
+                        }
+                        else
+                        {
+                            foreach (var mi in actMenuItems)
+                            {
+                                <MudListItem>
+                                    <ChildContent>
+                                        <MenuItemLineView MenuItem="mi" MenuItemDeleted="@MenuItemDeleted" />
+                                    </ChildContent>
+                                </MudListItem>
+                            }
                         }
                     }
-                    <MudIconButton Color="Color.Success" Icon="@Icons.Material.Add" Size="Size.Small" OnClick="@(() => AddMenuItem.InvokeAsync((mic,Date)))" />
+                    <MudIconButton Color="Color.Success" Icon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="@(() => AddMenuItem.InvokeAsync((mic,Date)))" />
+                    @*<MudToggleIconButton Toggled="" ></MudToggleIconButton>*@
+                    <MudIconButton Color="Color.Success" Icon="@Icons.Material.Filled.PersonAddDisabled" Size="Size.Small" OnClick="@(() => AddMenuItem.InvokeAsync((mic,Date)))" />
+                    <MudIconButton Color="Color.Success" Icon="@Icons.Material.Filled.Wysiwyg" Size="Size.Small" OnClick="@(() => AddMenuItem.InvokeAsync((mic,Date)))" />
+
                 </MudList>
             </ChildContent>
         </MudExpansionPanel>
@@ -39,4 +51,5 @@
 
     [Parameter]
     public EventCallback<MenuItem> MenuItemDeleted { get; set; }
+
 }

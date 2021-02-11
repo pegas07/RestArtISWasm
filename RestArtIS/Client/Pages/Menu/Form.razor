@@ -25,12 +25,21 @@
             {
                 if (menu.DateFrom != null && menu.DateTo != null)
                 {
-                    <MudText>@menu.DateFrom</MudText>
-                    <MudText>@menu.DateTo</MudText>
+                    <MudGrid Class="mb-4">
+                        <MudItem xs="6" sm="3" md="2">
+                            <MudTextField Label="Od" @bind-Value="menu.DateFrom" ReadOnly="true" />
+                        </MudItem>
+                        <MudItem Class="d-flex align-end" >-</MudItem>
+                        <MudItem xs="6" sm="3" md="2">
+                            <MudTextField Label="Do" @bind-Value="menu.DateTo" ReadOnly="true"/>
+                        </MudItem>
+                    </MudGrid>
                     for (var day = menu.DateFrom.Value; day <= menu.DateTo.Value; day = day.AddDays(1))
-                    {                        
-                        <MudText>@day.DayOfWeek</MudText>
-                        <MenuItemCategoryView MenuItemCategories="menu.MenuCategory.MenuItemCategories" MenuItems="menu.MenuItems" Date="day" AddMenuItem="AddMenuItem" MenuItemDeleted="DeleteMenuItem" /> 
+                    {
+                        var actDay = day;
+                        var dayName = actDay.ToString("dddd", new System.Globalization.CultureInfo("cs-CZ"));
+                        <MudText Typo="Typo.h5">@(char.ToUpper(dayName[0]) + dayName.Substring(1))</MudText>                        
+                        <MenuItemCategoryView MenuItemCategories="menu.MenuCategory.MenuItemCategories" MenuItems="menu.MenuItems" Date="actDay" AddMenuItem="AddMenuItem" MenuItemDeleted="DeleteMenuItem" /> 
                     }
                 }
             }
