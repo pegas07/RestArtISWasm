@@ -27,9 +27,23 @@ namespace RestArtIS.Shared.Models
             }
         }
 
+        [ForeignKey("Menu")]
+        public int? MenuId { get; set; }
+        private Menu menu;        
+
+        public Menu Menu
+        {
+            get => menu;
+            set
+            {
+                menu = value;
+                MenuId = value?.Id;
+            }
+        }
+
         [ForeignKey("DeliveryRoute")]
         public int? DeliveryRouteId { get; set; }
-        private DeliveryRoute deliveryRoute;        
+        private DeliveryRoute deliveryRoute;
 
         public DeliveryRoute DeliveryRoute
         {

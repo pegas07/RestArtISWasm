@@ -34,7 +34,7 @@ namespace RestArtIS.Server.Controllers
         }
 
         [Route("[action]/{text}")]
-        [HttpGet("{text}")]
+        [HttpGet]
         public async Task<IActionResult> Search(string text)
         {
             var bps = await _context.BusinessPartners.Include(rd => rd.DeliveryRoute).Where(bp => (bp.Name != null && bp.Name.Contains(text)) || (bp.Code != null && bp.Code.Contains(text))).ToListAsync();

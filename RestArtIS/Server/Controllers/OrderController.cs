@@ -25,6 +25,7 @@ namespace RestArtIS.Server.Controllers
         {
             var devs = await _context.Orders
                 .Include(rd => rd.DeliveryRoute)
+                .Include(m => m.Menu)
                 .Include(oi => oi.OrderItems)
                 .ToListAsync();
             return Ok(devs);
@@ -34,6 +35,7 @@ namespace RestArtIS.Server.Controllers
         {
             var dev = await _context.Orders
                 .Include(rd => rd.DeliveryRoute)
+                .Include(m => m.Menu)
                 .Include(oi => oi.OrderItems)
                 .FirstOrDefaultAsync(a => a.Id == id);
             return Ok(dev);
